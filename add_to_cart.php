@@ -92,6 +92,6 @@ mysqli_stmt_close($stmt);
 session_start();
 
 $_SESSION['cart_msg'] = "Đã thêm sản phẩm vào giỏ!";
-header("Location: index.php");
+header("Location: $redirect"); 
 exit();
 
