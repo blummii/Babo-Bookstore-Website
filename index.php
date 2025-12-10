@@ -18,7 +18,12 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0; // Set user_i
 </head>
 
 <body>
-
+<?php if (!empty($_SESSION['cart_msg'])): ?>
+    <div class="cart-alert">
+        <?= $_SESSION['cart_msg']; ?>
+    </div>
+    <?php unset($_SESSION['cart_msg']); ?>
+<?php endif; ?>
 <?php 
 include 'header.php'; 
 ?>
