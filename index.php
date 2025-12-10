@@ -88,7 +88,8 @@ include 'header.php';
         if (mysqli_num_rows($books) > 0) {
             while ($b = mysqli_fetch_assoc($books)) {
         ?>
-<form action="" method="post" class="pro_box">
+<form action="add_to_cart.php" method="POST" class="pro_box">
+    <input type="hidden" name="book_id" value="<?php echo $b['book_id']; ?>">
 
     <span class="badge hot">Hot</span> 
 
