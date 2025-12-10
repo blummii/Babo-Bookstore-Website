@@ -26,7 +26,7 @@ include 'header.php';
 <section class="home_cont">
     <div class="main_descrip">
         <h1>Tìm cuốn sách mới <br> với giá tốt nhất</h1>
-        <button onclick="window.location.href='shop.php'">Mua Ngay <i class="fas fa-arrow-right"></i></button>
+        <button onclick="window.location.href='checkout.php'">Mua Ngay <i class="fas fa-arrow-right"></i></button>
     </div>
 </section>
 
