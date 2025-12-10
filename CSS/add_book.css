@@ -1,0 +1,196 @@
+/* --- add_book.css --- */
+
+/* --- Form chính --- */
+#add-book-form {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* --- Label và input chung --- */
+#add-book-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #16515fff;
+}
+
+#add-book-form input[type="text"],
+#add-book-form input[type="number"],
+#add-book-form input[type="file"],
+#add-book-form textarea,
+#add-book-form select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #16515fff;
+    background-color: #fff;
+    transition: 0.3s;
+    margin-bottom: 12px;
+}
+
+#add-book-form input:focus,
+#add-book-form select:focus,
+#add-book-form textarea:focus {
+    border-color: #16515fff;
+    outline: none;
+}
+
+/* --- Textarea --- */
+#add-book-form textarea {
+    resize: vertical;
+}
+
+/* --- Submit button --- */
+#add-book-form .btn-submit {
+    grid-column: 1 / -1;
+    padding: 12px 20px;
+    background-color: #16515fff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+#add-book-form .btn-submit:hover {
+    background-color: #458298ff;
+}
+
+/* --- Thông báo lỗi và thành công --- */
+.error-messages, .success-message {
+    max-width: 900px;
+    margin: 10px auto;
+    padding: 12px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.error-messages {
+    background-color: #ffe5e5;
+    color: #ff0000;
+}
+
+.success-message {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+/* --- Tiêu đề h2 --- */
+.book-management h2 {
+    text-align: center;
+    margin: 25px 0 15px 0;
+    font-size: 28px;
+    font-weight: bold;
+    color: #16515fff;
+    border-bottom: 2px solid #16515fff;
+    padding-bottom: 5px;
+}
+
+/* --- Danh sách sách --- */
+#book-list {
+    max-width: 900px;
+    margin: 15px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#book-list .book-item {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    #add-book-form {
+        grid-template-columns: 1fr;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    #add-book-form .btn-submit {
+        width: 100%;
+    }
+}
+/* --- Form chính 1 cột --- */
+#add-book-form {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: "Segoe UI", sans-serif;
+}
+
+#add-book-form label {
+    font-weight: bold;
+    color: #16515fff;
+}
+
+#add-book-form input[type="text"],
+#add-book-form input[type="number"],
+#add-book-form input[type="file"],
+#add-book-form select,
+#add-book-form textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #16515fff;
+    background-color: #fff;
+    transition: 0.3s;
+}
+
+#add-book-form input:focus,
+#add-book-form select:focus,
+#add-book-form textarea:focus {
+    border-color: #16515fff;
+    outline: none;
+}
+
+#add-book-form textarea {
+    resize: vertical;
+}
+
+#add-book-form .btn-submit {
+    padding: 12px 20px;
+    background-color: #16515fff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+#add-book-form .btn-submit:hover {
+    background-color: #458298ff;
+}
