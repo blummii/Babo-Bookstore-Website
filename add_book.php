@@ -2,7 +2,7 @@
 session_start();
 include 'connect.php';
 
-// Nếu chưa đăng nhập
+// 1. Kiểm tra đăng nhập
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
@@ -11,150 +11,213 @@ if (!isset($_SESSION['user_id'])) {
 // Gán tên admin
 $admin_name = $_SESSION['username'] ?? "Admin";
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Thêm sách | Babo Bookstore</title>
-<link rel="stylesheet" href="CSS/admin.css">
-<link rel="stylesheet" href="CSS/add_book.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <title>Thêm sách mới | Babo Bookstore</title>
+    <link rel="stylesheet" href="CSS/admin.css">
+    
+    <link rel="stylesheet" href="CSS/add_book.css"> 
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 <?php include 'admin_nav.php'; ?>
 
 <main class="book-management">
-    <h2>Thêm sách mới</h2>
+    <div class="header-container" style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>Thêm sách mới</h2>
+        <a href="book_management.php" class="btn-back" style="text-decoration:none; color:#333;"><i class="fa fa-arrow-left"></i> Quay lại danh sách</a>
+    </div>
 
     <form id="add-book-form" enctype="multipart/form-data">
-        <label>Tên sách:</label>
-        <input type="text" name="title" required>
+        
+        <div class="form-group">
+            <label>Tên sách:</label>
+            <input type="text" name="title" required placeholder="Nhập tên sách...">
+        </div>
 
-        <label>Slug (tùy chọn):</label>
-        <input type="text" name="slug">
+        <div class="form-group">
+            <label>Slug (Tùy chọn):</label>
+            <input type="text" name="slug" placeholder="tự-động-tạo-nếu-để-trống">
+        </div>
 
-        <label>Mô tả:</label>
-        <textarea name="description" rows="4"></textarea>
+        <div class="form-group">
+            <label>Mô tả:</label>
+            <textarea name="description" rows="5" placeholder="Mô tả nội dung sách..."></textarea>
+        </div>
 
-        <label>Năm xuất bản:</label>
-        <input type="number" name="publish_year" value="<?= date('Y') ?>" min="1900" max="<?= date('Y') ?>">
+        <div class="form-row" style="display:flex; gap:20px;">
+            <div style="flex:1">
+                <label>Năm xuất bản:</label>
+                <input type="number" name="publish_year" value="<?= date('Y') ?>" min="1900" max="<?= date('Y') + 1 ?>">
+            </div>
+            <div style="flex:1">
+                <label>Số trang:</label>
+                <input type="number" name="pages" value="0">
+            </div>
+            <div style="flex:1">
+                <label>Trọng lượng (gram):</label>
+                <input type="number" name="weight" value="0">
+            </div>
+        </div>
 
-        <label>Số trang:</label>
-        <input type="number" name="pages" value="0">
+        <div class="form-group">
+            <label>Loại bìa:</label>
+            <select name="cover_type">
+                <option value="hard">Bìa Cứng</option>
+                <option value="soft" selected>Bìa Mềm</option>
+            </select>
+        </div>
 
-        <label>Trọng lượng (gram):</label>
-        <input type="number" name="weight" value="0">
+        <div class="form-row" style="display:flex; gap:20px;">
+            <div style="flex:1">
+                <label>Giá gốc (vnđ):</label>
+                <input type="number" step="1000" name="price" value="0">
+            </div>
+            <div style="flex:1">
+                <label>Giá khuyến mãi (vnđ):</label>
+                <input type="number" step="1000" name="discounted_price" value="0">
+            </div>
+        </div>
 
-        <label>Loại bìa:</label>
-        <select name="cover_type">
-            <option value="hard">Cứng</option>
-            <option value="soft">Mềm</option>
-        </select>
+        <div class="form-group">
+            <label>Thể loại:</label>
+            <select name="category">
+                <option value="">-- Chọn thể loại --</option>
+                <?php
+                $res = $ocon->query("SELECT * FROM categories");
+                while($cat = $res->fetch_assoc()){
+                    echo '<option value="'.$cat['category_id'].'">'.htmlspecialchars($cat['name']).'</option>';
+                }
+                ?>
+            </select>
+            <input type="text" name="new_category" placeholder="Hoặc nhập tên thể loại mới để tạo nhanh" style="margin-top:5px; font-size:0.9em;">
+        </div>
 
-        <label>Giá:</label>
-        <input type="number" step="0.01" name="price" value="0">
+        <div class="form-group">
+            <label>Nhà xuất bản:</label>
+            <select name="publisher">
+                <option value="">-- Chọn Nhà xuất bản --</option>
+                <?php
+                $res3 = $ocon->query("SELECT * FROM publishers");
+                while($pub = $res3->fetch_assoc()){
+                    echo '<option value="'.$pub['publisher_id'].'">'.htmlspecialchars($pub['name']).'</option>';
+                }
+                ?>
+            </select>
+            <input type="text" name="new_publisher" placeholder="Hoặc nhập NXB mới" style="margin-top:5px; font-size:0.9em;">
+        </div>
 
-        <label>Giá giảm:</label>
-        <input type="number" step="0.01" name="discounted_price" value="0">
+        <div class="form-group">
+            <label>Tác giả chính:</label>
+            <select name="author">
+                <option value="">-- Chọn Tác giả --</option>
+                <?php
+                $res2 = $ocon->query("SELECT * FROM authors");
+                while($auth = $res2->fetch_assoc()){
+                    echo '<option value="'.$auth['author_id'].'">'.htmlspecialchars($auth['name']).'</option>';
+                }
+                ?>
+            </select>
+            <input type="text" name="new_author" placeholder="Hoặc nhập tên tác giả mới" style="margin-top:5px; font-size:0.9em;">
+        </div>
 
-        <label>Thể loại:</label>
-        <select name="category">
-            <option value="">-- Chọn thể loại --</option>
-            <?php
-            $res = $ocon->query("SELECT * FROM categories");
-            while($cat = $res->fetch_assoc()){
-                echo '<option value="'.$cat['category_id'].'">'.htmlspecialchars($cat['name']).'</option>';
-            }
-            ?>
-        </select>
-        <input type="text" name="new_category" placeholder="Thêm thể loại mới nếu chưa có">
+        <div class="form-group">
+            <label>Số lượng tồn kho:</label>
+            <input type="number" name="stock_quantity" value="0">
+        </div>
 
-        <label>Nhà xuất bản:</label>
-        <select name="publisher">
-            <option value="">-- Chọn Nhà xuất bản --</option>
-            <?php
-            $res3 = $ocon->query("SELECT * FROM publishers");
-            while($pub = $res3->fetch_assoc()){
-                echo '<option value="'.$pub['publisher_id'].'">'.htmlspecialchars($pub['name']).'</option>';
-            }
-            ?>
-        </select>
-        <input type="text" name="new_publisher" placeholder="Thêm nhà xuất bản mới nếu chưa có">
+        <div class="form-group" style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
+            <label>Ảnh bìa sách:</label>
+            <input type="file" name="cover" accept="image/*" style="background: white;">
+        </div>
 
-        <label>Tác giả:</label>
-        <select name="author">
-            <option value="">-- Chọn Tác giả --</option>
-            <?php
-            $res2 = $ocon->query("SELECT * FROM authors");
-            while($auth = $res2->fetch_assoc()){
-                echo '<option value="'.$auth['author_id'].'">'.htmlspecialchars($auth['name']).'</option>';
-            }
-            ?>
-        </select>
-        <input type="text" name="new_author" placeholder="Thêm tác giả mới nếu chưa có">
+        <div class="form-group">
+            <label>Trạng thái hiển thị:</label>
+            <select name="status">
+                <option value="active">Hiển thị (Active)</option>
+                <option value="hidden">Ẩn (Hidden)</option>
+            </select>
+        </div>
 
-        <label>Số lượng tồn:</label>
-        <input type="number" name="stock_quantity" value="0">
-
-        <label>Ảnh bìa:</label>
-        <input type="file" name="cover" accept="image/*">
-
-        <label>Trạng thái:</label>
-        <select name="status">
-            <option value="active">Hiển thị</option>
-            <option value="hidden">Ẩn</option>
-        </select>
-
-        <button type="submit" class="btn-submit"><i class="fa fa-plus"></i> Thêm sách</button>
+        <button type="submit" class="btn-submit" style="margin-top: 20px;"><i class="fa fa-plus"></i> Thêm sách mới</button>
     </form>
 
-    <h2>Danh sách sách</h2>
-    <div id="book-list">
-        <!-- Danh sách sách sẽ được load ở đây -->
-    </div>
+    <h3 style="margin-top: 40px; border-bottom: 2px solid #ddd; padding-bottom: 10px;">Vừa thêm gần đây</h3>
+    <div id="book-list" style="margin-top: 15px;">
+        </div>
+
 </main>
 
 <script>
 document.getElementById('add-book-form').addEventListener('submit', function(e){
     e.preventDefault();
+    
+    // Hiệu ứng Loading cho nút bấm
+    const btn = this.querySelector('.btn-submit');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Đang xử lý...';
+    btn.disabled = true;
+
     let formData = new FormData(this);
 
     fetch('add_book_ajax.php', {
         method: 'POST',
         body: formData
     })
-    .then(res => res.json())
-    .then(data => {
-        if(data.success){
-            const book = data.book;
+    .then(res => res.text()) // Dùng text() để debug an toàn
+    .then(text => {
+        try {
+            const data = JSON.parse(text);
+            if(data.success){
+                const book = data.book;
 
-            // 1. Cập nhật ngay danh sách bên dưới trang Admin (để admin thấy sách vừa thêm)
-            const list = document.getElementById('book-list');
-            let htmlAdmin = `
-            <div class="book-item" style="border:1px solid #ddd; padding:10px; margin-bottom:10px; display:flex; gap:10px; align-items:center;">
-                <img src="${book.cover_path}" style="width:50px; height:70px; object-fit:cover;">
-                <div>
-                    <h3 style="margin:0">${book.title}</h3>
-                    <p style="margin:5px 0">Giá: ${Number(book.price).toLocaleString('vi-VN')}₫</p>
-                    <p style="margin:0; font-size:0.9em; color:#666;">${book.category_name} - ${book.author_name}</p>
-                </div>
-            </div>`;
-            
-            // Thêm vào đầu danh sách
-            list.insertAdjacentHTML('afterbegin', htmlAdmin);
+                // 1. Tạo HTML hiển thị sách vừa thêm bên dưới
+                const list = document.getElementById('book-list');
+                let htmlAdmin = `
+                <div class="book-item" style="background:#fff; border:1px solid #ddd; padding:15px; margin-bottom:10px; display:flex; gap:15px; align-items:center; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <img src="${book.cover_path}" style="width:60px; height:85px; object-fit:cover; border-radius:4px; border:1px solid #eee;">
+                    <div>
+                        <h3 style="margin:0; font-size:18px; color:#16515fff;">${book.title}</h3>
+                        <p style="margin:5px 0; font-weight:bold; color:#d32f2f;">${Number(book.price).toLocaleString('vi-VN')}₫</p>
+                        <p style="margin:0; font-size:0.9em; color:#666;">
+                            <span style="background:#eee; padding:2px 6px; border-radius:4px;">${book.category_name}</span> • 
+                            <span>${book.author_name}</span>
+                        </p>
+                    </div>
+                    <div style="margin-left:auto; color: green; font-weight:bold;">
+                        <i class="fa fa-check-circle"></i> Mới thêm
+                    </div>
+                </div>`;
+                
+                // Thêm vào đầu danh sách
+                list.insertAdjacentHTML('afterbegin', htmlAdmin);
 
-            // 2. Thông báo thành công
-            alert('Thêm sách thành công! Dữ liệu đã được cập nhật lên trang người dùng.');
-            
-            // 3. Reset form để nhập cuốn tiếp theo
-            document.getElementById('add-book-form').reset();
-        } else {
-            alert('Lỗi: ' + data.error);
+                // 2. Thông báo & Reset form
+                alert('Thêm sách thành công!');
+                document.getElementById('add-book-form').reset();
+                
+                // Scroll xuống để thấy sách vừa thêm
+                list.scrollIntoView({behavior: "smooth"});
+            } else {
+                alert('Lỗi: ' + data.error);
+            }
+        } catch(e) {
+            console.error("Lỗi PHP:", text);
+            alert("Lỗi server! Kiểm tra console.");
         }
     })
     .catch(err => {
         console.error(err);
-        alert('Lỗi kết nối server hoặc lỗi xử lý PHP.');
+        alert('Lỗi kết nối.');
+    })
+    .finally(() => {
+        // Trả lại nút bấm
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     });
 });
 </script>
