@@ -743,7 +743,7 @@ body {
 .add-address-btn i {
     margin-right: 8px;
 }
-//update css thông báo
+
 .cart-alert {
     position: fixed;
     top: 30px;
@@ -757,4 +757,21 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 9999;
     animation: fadeIn 0.3s ease;
+}
+/* Hiệu ứng hiện */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Hiệu ứng ẩn */
+.cart-alert.hide {
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
 }
