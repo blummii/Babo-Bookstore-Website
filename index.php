@@ -126,7 +126,14 @@ include 'header.php';
         ?>
     </div>
 </section>
-
+<script>
+    setTimeout(() => {
+        let alertBox = document.querySelector('.cart-alert');
+        if(alertBox){
+            alertBox.classList.add('hide');
+        }
+    }, 2500);
+</script>
 <?php include 'footer.php'; ?>
 
 </body>
