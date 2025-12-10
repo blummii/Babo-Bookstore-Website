@@ -135,6 +135,17 @@ if (isset($_POST['update_qty'])) {
             <?php endwhile; ?>
 
         </table>
+<div class="cart_bottom">
+
+    <div class="cart_total_row">
+        <span>Tổng cộng:</span>
+        <span><?php echo number_format($total, 0, ',', '.'); ?>₫</span>
+    </div>
+
+    <div class="cart_buttons">
+        <a href="index.php" class="more_btn">Mua thêm</a>
+        <a href="checkout.php" class="checkout_btn">Thanh toán</a>
+    </div>
 
 </div>
 
@@ -147,5 +158,3 @@ if (isset($_POST['update_qty'])) {
 
 </body>
 </html>
-
-
