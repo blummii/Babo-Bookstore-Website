@@ -87,9 +87,17 @@ $admin_name = $admin_name ?? "Admin";
             <i class="fa fa-chart-line"></i> Dashboard
         </a>
 
-        <a href="#" class="<?= ($current_page=='#')?'active':'' ?>">
-            <i class="fa fa-book"></i> Quản lý sách
+        <a href="javascript:void(0);" id="bookMenuToggle">
+            <i class="fa fa-book"></i> Quản lý sách ▾
         </a>
+        <ul class="submenu" id="bookSubmenu">
+            <li>
+                <a href="admin_bookmanagement.php" class="<?= ($current_page=='admin_bookmanagement.php')?'active':'' ?>">Quản lý sách</a>
+            </li>
+            <li>
+                <a href="admin_categorymanagement.php" class="<?= ($current_page=='admin_categorymanagement.php')?'active':'' ?>">Quản lý danh mục</a>
+            </li>
+        </ul>
 
         <a href="admin_usermanagement.php" class="<?= ($current_page=='admin_usermanagement.php')?'active':'' ?>">
             <i class="fa fa-users"></i> Quản lý Người dùng
