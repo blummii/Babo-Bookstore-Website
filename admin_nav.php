@@ -91,7 +91,7 @@ $admin_name = $admin_name ?? "Admin";
             <i class="fa fa-book"></i> Quản lý sách
         </a>
 
-        <a href="usermanagement.php" class="<?= ($current_page=='usermanagement.php')?'active':'' ?>">
+        <a href="admin_usermanagement.php" class="<?= ($current_page=='admin_usermanagement.php')?'active':'' ?>">
             <i class="fa fa-users"></i> Quản lý Người dùng
         </a>
 
