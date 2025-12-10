@@ -89,8 +89,8 @@ include 'header.php';
 
     <img src="<?php echo $b['image']; ?>">
 
-    <a href="checkout.php?id=<?php echo $b['book_id']; ?>" class="buy_now_btn">
-        MUA NGAY
+    <a href="checkout.php?id=<?php echo $b['book_id']; ?>&qty=1" class="buy_now_btn">
+    MUA NGAY
     </a>
 
     <h3><?php echo $b['title']; ?></h3>
