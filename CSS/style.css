@@ -725,3 +725,18 @@ body {
 .add-address-btn i {
     margin-right: 8px;
 }
+//update css thông báo
+.cart-alert {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #17584b;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
