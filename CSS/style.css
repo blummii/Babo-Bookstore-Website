@@ -588,6 +588,24 @@ body {
     position: relative;
     z-index: 5;
 }
+.alert {
+    background: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    margin: 10px auto;
+    width: 90%;
+    border-radius: 5px;
+    font-size: 17px;
+}
+.add-btn {
+    padding: 10px 20px;
+    background: #2196f3;
+    color: #fff;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
 /* ============================
    USER BOX (Tên người dùng)
    ============================ */
