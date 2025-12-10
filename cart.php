@@ -110,8 +110,31 @@ if (isset($_POST['update_qty'])) {
 
                 <td><?php echo $row['title']; ?></td>
 
-                <td><?php echo checkout.php" class="checkout_btn">Thanh toán</a>
-    </div>
+                <td><?php echo number_format($row['price'], 0, ',', '.'); ?>₫</td>
+
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="item_id" value="<?php echo $row['cart_item_id']; ?>">
+                        <input type="number" name="qty" value="<?php echo $row['quantity']; ?>" min="1">
+                        <button type="submit" name="update_qty" class="update_btn">
+                            Cập nhật
+                        </button>
+                    </form>
+                </td>
+
+                <td><?php echo number_format($row['subtotal'], 0, ',', '.'); ?>₫</td>
+
+                <td>
+                    <a href="cart.php?remove=<?php echo $row['cart_item_id']; ?>" class="remove_btn"
+                       onclick="return confirm('Xóa sản phẩm này?');">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+
+            <?php endwhile; ?>
+
+        </table>
 
 </div>
 
@@ -124,4 +147,5 @@ if (isset($_POST['update_qty'])) {
 
 </body>
 </html>
+
 
