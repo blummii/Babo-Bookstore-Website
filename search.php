@@ -28,8 +28,12 @@ $user_id = $_SESSION['user_id'] ?? null;
 
 <!-- ===== SEARCH ===== -->
 <section class="search_cont">
-    <form method="post">
-        <input type="text" name="search" placeholder="🔍 Nhập tên sách..." required>
+    <form method="post" class="search_form" autocomplete="off" onsubmit="return submitSearch();">
+        <input type="text" name="search" id="search_input" placeholder="🔍 Nhập tên sách..." required>
+
+        <!-- Gợi ý sẽ hiển thị ở đây (vẫn nằm trong form để vị trí chuẩn) -->
+        <div id="suggest_box" class="suggest_box" aria-hidden="true"></div>
+
         <input type="submit" name="submit" value="Tìm kiếm" class="search_btn">
     </form>
 </section>
@@ -108,6 +112,79 @@ $user_id = $_SESSION['user_id'] ?? null;
 </section>
 
 <?php include 'footer.php'; ?>
+<script>
+// ---- Debounce helper để giảm request khi gõ ----
+function debounce(fn, delay){
+    let t;
+    return function(...args){
+        clearTimeout(t);
+        t = setTimeout(()=> fn.apply(this,args), delay);
+    }
+}
 
+const input = document.getElementById('search_input');
+const suggestBox = document.getElementById('suggest_box');
+
+async function fetchSuggestions(keyword){
+    if (!keyword || keyword.trim().length === 0) {
+        suggestBox.innerHTML = '';
+        suggestBox.style.display = 'none';
+        return;
+    }
+
+    // POST form data
+    const form = new FormData();
+    form.append('keyword', keyword.trim());
+
+    try {
+        const res = await fetch('search_suggest.php', {
+            method: 'POST',
+            body: form
+        });
+        const html = await res.text();
+
+        if (html && html.trim().length > 0) {
+            suggestBox.innerHTML = html;
+            suggestBox.style.display = 'block';
+            suggestBox.setAttribute('aria-hidden','false');
+        } else {
+            suggestBox.innerHTML = '';
+            suggestBox.style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Fetch suggest error:', err);
+        suggestBox.style.display = 'none';
+    }
+}
+
+// Debounced handler (wait 220ms after user stops typing)
+const onKey = debounce(function(e){
+    fetchSuggestions(e.target.value);
+}, 220);
+
+input.addEventListener('input', onKey);
+
+// Hide suggestions when clicking outside
+document.addEventListener('click', function(e){
+    if (!document.querySelector('.search_form').contains(e.target)) {
+        suggestBox.style.display = 'none';
+    }
+});
+
+// Called when user clicks a suggestion
+function selectSuggestion(text){
+    input.value = text;
+    suggestBox.style.display = 'none';
+    // auto-submit the form after selecting suggestion:
+    document.querySelector('.search_form').submit();
+}
+
+// When user hits Enter / clicks search button, keep existing POST behavior.
+// This function prevents double submission when autocomplete auto-submits.
+function submitSearch(){
+    // allow form to submit normally (POST) — no JS redirect
+    return true;
+}
+</script>
 </body>
 </html>
