@@ -94,7 +94,6 @@ if ($cart_id > 0) {
             </nav>
 
             <div class="icons">
-                <a href="search.php" class="fas fa-search"></a>
 
                 <a href="cart.php">
                     <i class="fas fa-shopping-cart"></i>
