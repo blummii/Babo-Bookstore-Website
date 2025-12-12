@@ -66,8 +66,52 @@ if (isset($_GET['delete'])) {
     if ($user_id == $_SESSION['user_id']) {
         $message[] = "Không thể xóa tài khoản của chính bạn!";
     } else {
-        mysqli_query($ocon, "DELETE FROM users WHERE user_id = $user_id");
-        $message[] = "Đã xóa người dùng thành công!";
+        // Bắt đầu transaction để xóa an toàn
+        mysqli_begin_transaction($ocon);
+        
+        try {
+            // 1. Xóa return_requests
+            mysqli_query($ocon, "DELETE FROM return_requests WHERE user_id = $user_id");
+            
+            // 2. Xóa reviews
+            mysqli_query($ocon, "DELETE FROM reviews WHERE user_id = $user_id");
+            
+            // 3. Xóa coupon_users
+            mysqli_query($ocon, "DELETE FROM coupon_users WHERE user_id = $user_id");
+            
+            // 4. Xóa cart_items (thông qua cart_id)
+            $cart_query = mysqli_query($ocon, "SELECT cart_id FROM carts WHERE user_id = $user_id");
+            while ($cart = mysqli_fetch_assoc($cart_query)) {
+                mysqli_query($ocon, "DELETE FROM cart_items WHERE cart_id = {$cart['cart_id']}");
+            }
+            
+            // 5. Xóa carts
+            mysqli_query($ocon, "DELETE FROM carts WHERE user_id = $user_id");
+            
+            // 6. Xóa order_items (thông qua order_id)
+            $order_query = mysqli_query($ocon, "SELECT order_id FROM orders WHERE user_id = $user_id");
+            while ($order = mysqli_fetch_assoc($order_query)) {
+                mysqli_query($ocon, "DELETE FROM order_items WHERE order_id = {$order['order_id']}");
+                mysqli_query($ocon, "DELETE FROM payment WHERE order_id = {$order['order_id']}");
+                mysqli_query($ocon, "DELETE FROM shipping_tracking WHERE order_id = {$order['order_id']}");
+            }
+            
+            // 7. Xóa orders
+            mysqli_query($ocon, "DELETE FROM orders WHERE user_id = $user_id");
+            
+            // 8. Xóa addresses
+            mysqli_query($ocon, "DELETE FROM addresses WHERE user_id = $user_id");
+            
+            // 9. Cuối cùng xóa user
+            mysqli_query($ocon, "DELETE FROM users WHERE user_id = $user_id");
+            
+            mysqli_commit($ocon);
+            $message[] = "Đã xóa người dùng và toàn bộ dữ liệu liên quan thành công!";
+            
+        } catch (Exception $e) {
+            mysqli_rollback($ocon);
+            $message[] = "Lỗi khi xóa người dùng: " . $e->getMessage();
+        }
     }
 }
 
@@ -585,3 +629,4 @@ document.getElementById('editModal').addEventListener('click', function(e) {
 </body>
 
 </html>
+
