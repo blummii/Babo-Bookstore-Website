@@ -54,7 +54,7 @@ if (isset($_GET['toggle_status'])) {
     $new_status = ($user['status'] == 'active') ? 'banned' : 'active';
     
     mysqli_query($ocon, "UPDATE users SET status = '$new_status' WHERE user_id = $user_id");
-    header("Location: usermanagement.php");
+    header("Location: admin_usermanagement.php");
     exit();
 }
 
@@ -439,7 +439,7 @@ $total_admin = mysqli_num_rows(mysqli_query($ocon, "SELECT user_id FROM users WH
             </select>
 
             <button type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
-            <a href="usermanagement.php" class="btn" style="background:#6b7280;padding:0.6rem 1rem;">
+            <a href="admin_usermanagement.php" class="btn" style="background:#6b7280;padding:0.6rem 1rem;">
                 <i class="fas fa-redo"></i> Reset
             </a>
         </form>
@@ -583,4 +583,5 @@ document.getElementById('editModal').addEventListener('click', function(e) {
 </script>
 
 </body>
+
 </html>
