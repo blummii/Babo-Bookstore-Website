@@ -107,6 +107,9 @@ body {
     padding: 2rem;
     position: relative;
     overflow: hidden;
+        position: static ;
+    z-index: auto ;
+    overflow: visible ;
 }
 
 /* Trang trí nền hình tròn mờ ảo giống ảnh */
@@ -797,7 +800,7 @@ body {
     max-height: 320px;
     overflow-y: auto;
     display: none;
-    z-index: 2000;
+    z-index: 1000000 ;
 }
 .suggest_item {
     padding: 12px 16px;
@@ -811,3 +814,24 @@ body {
 .suggest_item i { color: #4a746b; font-size: 16px; }
 .suggest_item:hover { background: #f7fafc; }
 .suggest_item.no_result { color: #6b7280; cursor: default; }
+
+/* Container cha không được tạo stacking context */
+.search_form {
+    position: relative !important;
+    z-index: 99998 !important;
+}
+
+/* Chặn các section dưới không đè lên */
+/* ===== FORCE SEARCH TO BE ABOVE EVERYTHING ===== */
+.search_cont {
+    position: relative !important;
+    z-index: 999999 !important;
+}
+
+
+/* Xóa stacking context của features section */
+.features_section {
+    position: static ;
+    z-index: auto ;
+    overflow: visible ;
+}

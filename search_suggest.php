@@ -12,7 +12,7 @@ $keyword = trim($_POST['keyword']);
 $keywordLower = mb_strtolower($keyword, 'UTF-8');
 $keywordEsc = mysqli_real_escape_string($ocon, $keywordLower);
 
-/* 1) Tìm các tiêu đề bắt đầu bằng từ nhập (bắt đầu chuỗi hoặc bắt đầu sau dấu cách) */
+/* 1) Tìm các tiêu đề bắt đầu bằng từ nhập */
 $sql = "
     SELECT book_id, title
     FROM books
@@ -27,7 +27,7 @@ $sql = "
 
 $result = mysqli_query($ocon, $sql);
 
-/* 2) Nếu không có kết quả, fallback sang chứa từ khóa ở bất kỳ vị trí nào */
+/* 2) Nếu không có kết quả, fallback */
 if (!$result || mysqli_num_rows($result) == 0) {
     $sql2 = "
         SELECT book_id, title
@@ -42,12 +42,19 @@ if (!$result || mysqli_num_rows($result) == 0) {
 
 if ($result && mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        // escape html
+
+        $id = $row['book_id'];
         $title = htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8');
-        echo '<div class="suggest_item" data-title="'.$title.'" onclick="selectSuggestion(this.dataset.title)">';
-        echo '<i class="fas fa-search"></i> '.$title;
-        echo '</div>';
+
+        echo '
+        <div class="suggest_item" 
+             data-id="'.$id.'" 
+             onclick="selectSuggestion(this.dataset.id)">
+            <i class="fas fa-search"></i> '.$title.'
+        </div>';
     }
 } else {
-    echo '<div class="suggest_item no_result">Không tìm thấy</div>';
+    echo '<div class="suggest_item no_result">Sách chưa có trong cửa hàng</div>';
 }
+
+?>
